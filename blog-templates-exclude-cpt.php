@@ -104,7 +104,7 @@ class MJ_Blog_Templates_Exclude_Post_Type {
 			echo "<p><select name='template-exclude-cpt-settings' id='template-exclude-cpt-settings'>";
 			echo "<option value=''>Please select a template</option>";
 			foreach ( $templates as $key => $value ) {
-				echo "<option value='$key'>$value</option>";
+				echo '<option value="' . esc_attr( $key ) . '">' . esc_html( $value ) . '</option>';
 			}
 			echo '</select> ';
 			echo '<img src="' . admin_url( '/images/wpspin_light.gif' ) . '" class="waiting" id="bte-loading" style="display: none;">';
@@ -135,7 +135,7 @@ class MJ_Blog_Templates_Exclude_Post_Type {
 		$settings = (array) get_site_option( 'exclude-cpt-settings-' . $blog_id );
 
 		echo '<p>Please choose which post types you DO NOT wish to be included in the copy.</p>';
-		echo '<input type="hidden" name="bte-option-name" value="exclude-cpt-settings-' . $blog_id . '" >';
+		echo '<input type="hidden" name="bte-option-name" value="exclude-cpt-settings-' . absint( $blog_id ) . '" >';
 
 		global $switched;
 		switch_to_blog( $blog_id );
@@ -150,7 +150,7 @@ class MJ_Blog_Templates_Exclude_Post_Type {
 		echo '<table>';
 		foreach ( $post_types as $post_type ) {
 			$post_type = $post_type['post_type'];
-			echo "<tr><td> $post_type </td><td> <input type='checkbox' id='exclude-cpt-settings-.$post_type' name='exclude-cpt-settings-$post_type' " . checked( $settings[ $post_type ], 'on', false ) . "></td></tr>";
+			echo "<tr><td> " . esc_html( $post_type ) . " </td><td> <input type='checkbox' id='exclude-cpt-settings-" . esc_attr( $post_type ) . "' name='exclude-cpt-settings-" . esc_attr( $post_type ) . "' " . checked( $settings[ $post_type ], 'on', false ) . "></td></tr>";
 		}
 		echo '</table>';
 
@@ -194,7 +194,7 @@ class MJ_Blog_Templates_Exclude_Post_Type {
 	 *
 	 */
 	function check_source_blog_pre_copy( $table, $blog_id ) {
-		$this->exclude_cpt_settings = (array) get_site_option( 'exclude-cpt-settings-' . $blog_id );
+		$this->exclude_cpt_settings = (array) get_site_option( 'exclude-cpt-settings-' . absint( $blog_id ) );
 	}
 
 	/**
